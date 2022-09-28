@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using Leopotam.EcsLite;
 using UnityEngine;
 
-public class PlayerMoveSystem : IEcsRunSystem
+public class PlayerMoveSystem : IEcsRunSystem, IEcsInitSystem
 {
     private EcsWorld _world;
     private EcsFilter _filter;
@@ -12,15 +10,6 @@ public class PlayerMoveSystem : IEcsRunSystem
 
     public void Run(IEcsSystems systems)
     {
-        if (_world == null)
-        {
-            _world = systems.GetWorld();
-            _filter = _world.Filter<InputEventComponent>().Inc<MovableComponent>().End();
-
-            _inputComponents = _world.GetPool<InputEventComponent>();
-            _movableComponents = _world.GetPool<MovableComponent>();
-        }
-
         foreach (int entity in _filter)
         {
             ref InputEventComponent inputComponent = ref _inputComponents.Get(entity);
@@ -39,5 +28,13 @@ public class PlayerMoveSystem : IEcsRunSystem
                     Time.deltaTime * movableComponent.rotationSpeed);
             }
         }
+    }
+
+    public void Init(IEcsSystems systems)
+    {
+        _world = systems.GetWorld();
+        _filter = _world.Filter<InputEventComponent>().Inc<MovableComponent>().End();
+        _inputComponents = _world.GetPool<InputEventComponent>();
+        _movableComponents = _world.GetPool<MovableComponent>();
     }
 }

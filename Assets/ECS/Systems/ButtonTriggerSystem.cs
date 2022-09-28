@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Leopotam.EcsLite;
 using UnityEngine;
 
@@ -22,8 +20,7 @@ public class ButtonTriggerSystem : IEcsRunSystem, IEcsInitSystem
             {
                 ref ButtonTriggerComponent animatedCharacterComponent = ref _buttonTriggerComponents.Get(entityButton);
 
-                float radius = animatedCharacterComponent.GetRadius();
-                if (Vector3.Distance(animatedCharacterComponent.transform.position, position) < radius)
+                if (Vector3.Distance(animatedCharacterComponent.transform.position, position) < animatedCharacterComponent.buttonRadius)
                 {
                     foreach (var entityDor in _filterForDor)
                     {
@@ -31,7 +28,6 @@ public class ButtonTriggerSystem : IEcsRunSystem, IEcsInitSystem
                             _openDorAnimationComponents.Get(entityDor).tryPushToOpen = true;
                     }
                     animatedCharacterComponent.inTrigger = true;
-                    Debug.Log($"index = {animatedCharacterComponent.index}");
                 }
                 else
                 {

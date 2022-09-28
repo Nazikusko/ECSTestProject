@@ -16,7 +16,7 @@ public class OpenDorAnimationSystem : IEcsRunSystem, IEcsInitSystem
 
             if (openDorAnimationComponent.tryPushToOpen && !openDorAnimationComponent.isOpened)
             {
-                openDorAnimationComponent.currentRotateAngle += Time.deltaTime * OpenDorAnimationComponent.openDorSpeed;
+                openDorAnimationComponent.currentRotateAngle += Time.deltaTime * OpenDorAnimationComponent.OPEN_DOR_SPEED;
 
                 if (openDorAnimationComponent.currentRotateAngle > 90f)
                 {

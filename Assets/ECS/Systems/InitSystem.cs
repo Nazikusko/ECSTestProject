@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Leopotam.EcsLite;
 using UnityEngine;
 
@@ -10,8 +8,17 @@ public class InitSystem : IEcsInitSystem
     {
         _world = systems.GetWorld();
 
+        SpawnAndSetupPlayer();
 
-        //Player character
+        for (int i = 0; i < 5; i++)
+        {
+            SetButton(i);
+            SetDor(i);
+        }
+    }
+
+    private void SpawnAndSetupPlayer()
+    {
         var playerEntity = _world.NewEntity();
         var movableComponent = _world.GetPool<MovableComponent>();
         var animatedCharacterComponent = _world.GetPool<AnimatedCharacterComponent>();
@@ -19,7 +26,6 @@ public class InitSystem : IEcsInitSystem
         movableComponent.Add(playerEntity);
         animatedCharacterComponent.Add(playerEntity);
         inputEventComponent.Add(playerEntity);
-
 
         var playerInitData = PlayerInitData.LoadFromAsset();
         var spawnedPlayerPrefab = GameObject.Instantiate(playerInitData.playerPrefab, Vector3.zero, Quaternion.identity);
@@ -29,12 +35,6 @@ public class InitSystem : IEcsInitSystem
         movable.moveSpeed = playerInitData.defaultSpeed;
         movable.rotationSpeed = playerInitData.defaultRotateSpeed;
         movable.transform = spawnedPlayerPrefab.transform;
-
-        for (int i = 0; i < 5; i++)
-        {
-            SetButton(i);
-            SetDor(i);
-        }
     }
 
     private void SetButton(int index)
@@ -53,6 +53,7 @@ public class InitSystem : IEcsInitSystem
         ref ButtonTriggerComponent buttonTrigger = ref buttonTigerComponent.Get(buttonEntity);
         buttonGameObject.GetComponent<MeshRenderer>().material.color = ColorByIndex(index);
         buttonTrigger.transform = buttonGameObject.transform;
+        buttonTrigger.buttonRadius = buttonTrigger.transform.GetComponent<MeshFilter>().mesh.bounds.extents.x;
         buttonTrigger.index = index;
     }
 
