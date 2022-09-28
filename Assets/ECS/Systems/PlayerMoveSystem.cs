@@ -35,8 +35,8 @@ public class PlayerMoveSystem : IEcsRunSystem
             if (movableComponent.isMoving)
             {
                 Vector3 targetVector = inputComponent.pointDirection - movableComponent.transform.position;
-                movableComponent.transform.forward = Vector3.Slerp(movableComponent.transform.forward,
-                    targetVector, Time.deltaTime * movableComponent.rotateSpeed);
+                movableComponent.transform.rotation = Quaternion.Lerp(movableComponent.transform.rotation, Quaternion.LookRotation(targetVector),
+                    Time.deltaTime * movableComponent.rotationSpeed);
             }
         }
     }

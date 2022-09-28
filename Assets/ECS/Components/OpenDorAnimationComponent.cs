@@ -6,8 +6,9 @@ public struct OpenDorAnimationComponent
 {
     public int index;
     public Transform transform;
+    public Quaternion startRotation;
     public bool tryPushToOpen;
     public bool isOpened;
     public float currentRotateAngle;
-    public float openDorSpeed;
+    public const float openDorSpeed = 10f;
 }

@@ -6,6 +6,6 @@ public struct MovableComponent
 {
     public Transform transform;
     public float moveSpeed;
-    public float rotateSpeed;
+    public float rotationSpeed;
     public bool isMoving;
 }

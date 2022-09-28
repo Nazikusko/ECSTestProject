@@ -14,7 +14,7 @@ public class PlayerInputSystem : IEcsRunSystem
         {
             if (_mainCamera == null) _mainCamera = GameObject.FindObjectOfType<Camera>();
             if (_mainCamera == null) return;
-            
+
             if (_world == null)
             {
                 _world = systems.GetWorld();
@@ -24,10 +24,8 @@ public class PlayerInputSystem : IEcsRunSystem
             Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitPoint;
 
-            if (Physics.Raycast(ray, out hitPoint))
+            if (Physics.Raycast(ray, out hitPoint, Mathf.Infinity, LayerMask.GetMask("PointableGround")))
             {
-                
-
                 var inputComponents = _world.GetPool<InputEventComponent>();
 
                 foreach (int entity in _filter)

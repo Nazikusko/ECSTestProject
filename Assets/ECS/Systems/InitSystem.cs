@@ -27,46 +27,53 @@ public class InitSystem : IEcsInitSystem
 
         ref MovableComponent movable = ref movableComponent.Get(playerEntity);
         movable.moveSpeed = playerInitData.defaultSpeed;
-        movable.rotateSpeed = playerInitData.defaultRotateSpeed;
+        movable.rotationSpeed = playerInitData.defaultRotateSpeed;
         movable.transform = spawnedPlayerPrefab.transform;
 
         for (int i = 0; i < 5; i++)
         {
-            CreateButton(i);
-            CreateDor(i);
+            SetButton(i);
+            SetDor(i);
         }
     }
 
-    private void CreateButton(int index)
+    private void SetButton(int index)
     {
         var buttonEntity = _world.NewEntity();
         var buttonTigerComponent = _world.GetPool<ButtonTriggerComponent>();
         buttonTigerComponent.Add(buttonEntity);
 
-        var spawnedButton = GameObject.Instantiate(Resources.Load<GameObject>("ButtonPrefab"),
-            new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f)), Quaternion.identity);
+        var buttonGameObject = GameObject.Find($"Buttons/ButtonPrefab{index}");
+        if (buttonGameObject == null)
+        {
+            Debug.LogError($"ButtonPrefab{index} - not found in scene");
+            return;
+        }
 
         ref ButtonTriggerComponent buttonTrigger = ref buttonTigerComponent.Get(buttonEntity);
-        spawnedButton.GetComponent<MeshRenderer>().material.color = ColorByIndex(index);
-        buttonTrigger.transform = spawnedButton.transform;
+        buttonGameObject.GetComponent<MeshRenderer>().material.color = ColorByIndex(index);
+        buttonTrigger.transform = buttonGameObject.transform;
         buttonTrigger.index = index;
     }
 
-    private void CreateDor(int index)
+    private void SetDor(int index)
     {
         var dorEntity = _world.NewEntity();
         var openDorAnimationComponent = _world.GetPool<OpenDorAnimationComponent>();
         openDorAnimationComponent.Add(dorEntity);
 
-        var dorInitData = DorInitData.LoadFromAsset();
-        var spawnedDor = GameObject.Instantiate(dorInitData.dorPrefab,
-            new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f)), Quaternion.identity);
+        var dorGameObject = GameObject.Find($"Dors/DorPrefab{index}");
+        if (dorGameObject == null)
+        {
+            Debug.LogError($"DorPrefab{index} - not found in scene");
+            return;
+        }
 
         ref OpenDorAnimationComponent dor = ref openDorAnimationComponent.Get(dorEntity);
 
-        spawnedDor.GetComponentInChildren<MeshRenderer>().material.color = ColorByIndex(index);
-        dor.openDorSpeed = dorInitData.defaultRotateSpeed;
-        dor.transform = spawnedDor.transform;
+        dorGameObject.GetComponentInChildren<MeshRenderer>().material.color = ColorByIndex(index);
+        dor.transform = dorGameObject.transform;
+        dor.startRotation = dorGameObject.transform.rotation;
         dor.index = index;
     }
 

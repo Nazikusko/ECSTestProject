@@ -6,7 +6,7 @@ public class OpenDorAnimationSystem : IEcsRunSystem, IEcsInitSystem
     private EcsWorld _world;
     private EcsFilter _filter;
     private EcsPool<OpenDorAnimationComponent> _openDorAnimationComponents;
-    
+
 
     public void Run(IEcsSystems systems)
     {
@@ -16,14 +16,15 @@ public class OpenDorAnimationSystem : IEcsRunSystem, IEcsInitSystem
 
             if (openDorAnimationComponent.tryPushToOpen && !openDorAnimationComponent.isOpened)
             {
-                openDorAnimationComponent.currentRotateAngle += Time.deltaTime * openDorAnimationComponent.openDorSpeed;
+                openDorAnimationComponent.currentRotateAngle += Time.deltaTime * OpenDorAnimationComponent.openDorSpeed;
 
                 if (openDorAnimationComponent.currentRotateAngle > 90f)
                 {
                     openDorAnimationComponent.isOpened = true;
                     return;
                 }
-                openDorAnimationComponent.transform.rotation = Quaternion.AngleAxis(openDorAnimationComponent.currentRotateAngle, Vector3.up);
+                openDorAnimationComponent.transform.rotation = openDorAnimationComponent.startRotation
+                                                               * Quaternion.AngleAxis(openDorAnimationComponent.currentRotateAngle, Vector3.up);
                 openDorAnimationComponent.tryPushToOpen = false;
             }
         }
