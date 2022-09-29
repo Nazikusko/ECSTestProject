@@ -1,10 +1,11 @@
 {
   "dependencies": {
     "com.leopotam.ecslite": {
-      "version": "file:D:/ecslite-master",
+      "version": "https://github.com/Leopotam/ecslite.git",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "42741da4c087b44afefd269ebb566b3e8fae8464"
     },
     "com.unity.collab-proxy": {
       "version": "1.11.2",
