@@ -1,8 +1,10 @@
+using System;
 using Leopotam.EcsLite;
 using UnityEngine;
 
 public class ButtonTriggerSystem : IEcsRunSystem, IEcsInitSystem
 {
+    public static event Action<int> ButtonPressed;
     private EcsWorld _world;
     private EcsFilter _filterForButtonTrigger;
     private EcsFilter _filterForMovable;
@@ -18,20 +20,20 @@ public class ButtonTriggerSystem : IEcsRunSystem, IEcsInitSystem
             Vector3 position = _movableComponents.Get(entityMovable).transform.position;
             foreach (int entityButton in _filterForButtonTrigger)
             {
-                ref ButtonTriggerComponent animatedCharacterComponent = ref _buttonTriggerComponents.Get(entityButton);
+                ref ButtonTriggerComponent buttonTriggerComponent = ref _buttonTriggerComponents.Get(entityButton);
 
-                if (Vector3.Distance(animatedCharacterComponent.transform.position, position) < animatedCharacterComponent.buttonRadius)
+                if (Vector3.Distance(buttonTriggerComponent.transform.position, position) < buttonTriggerComponent.buttonRadius)
                 {
                     foreach (var entityDor in _filterForDor)
                     {
-                        if (animatedCharacterComponent.index == _openDorAnimationComponents.Get(entityDor).index)
-                            _openDorAnimationComponents.Get(entityDor).tryPushToOpen = true;
+                        if (buttonTriggerComponent.index == _openDorAnimationComponents.Get(entityDor).index)
+                            ButtonPressed?.Invoke(buttonTriggerComponent.index);
                     }
-                    animatedCharacterComponent.inTrigger = true;
+                    buttonTriggerComponent.inTrigger = true;
                 }
                 else
                 {
-                    animatedCharacterComponent.inTrigger = false;
+                    buttonTriggerComponent.inTrigger = false;
                 }
             }
         }
