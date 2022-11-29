@@ -10,8 +10,11 @@ public class Loader : MonoBehaviour
     {
         _world = new EcsWorld();
         _systems = new EcsSystems(_world);
-        _systems.Add(new InitSystem());
-        _systems.Add(new PlayerInputSystem());
+        _systems.Add(new InitSystems());
+        _systems.Add(new InputSystem());
+        _systems.Add(new UpdateTransformPositionSystem());
+        _systems.Add(new UpdateTransformRotationSystem());
+        _systems.Add(new CameraFollowSystem());
         _systems.Add(new PlayerMoveSystem());
         _systems.Add(new PlayerAnimatedSystem());
         _systems.Add(new ButtonTriggerSystem());

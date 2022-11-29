@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public struct InputEventComponent
+public struct InputComponent
 {
+    public Camera mainCamera;
     public Vector3 pointDirection;
 }

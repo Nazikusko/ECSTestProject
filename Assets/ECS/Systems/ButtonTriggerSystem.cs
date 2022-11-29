@@ -17,12 +17,12 @@ public class ButtonTriggerSystem : IEcsRunSystem, IEcsInitSystem
     {
         foreach (var entityMovable in _filterForMovable)
         {
-            Vector3 position = _movableComponents.Get(entityMovable).transform.position;
+            Vector3 position = _movableComponents.Get(entityMovable).position;
             foreach (int entityButton in _filterForButtonTrigger)
             {
                 ref ButtonTriggerComponent buttonTriggerComponent = ref _buttonTriggerComponents.Get(entityButton);
 
-                if (Vector3.Distance(buttonTriggerComponent.transform.position, position) < buttonTriggerComponent.buttonRadius)
+                if (Vector3.Distance(buttonTriggerComponent.buttonPosition, position) < buttonTriggerComponent.buttonRadius)
                 {
                     foreach (var entityDor in _filterForDor)
                     {
@@ -45,6 +45,7 @@ public class ButtonTriggerSystem : IEcsRunSystem, IEcsInitSystem
         _filterForButtonTrigger = _world.Filter<ButtonTriggerComponent>().End();
         _filterForMovable = _world.Filter<MovableComponent>().End();
         _filterForDor = _world.Filter<OpenDorAnimationComponent>().End();
+        
         _buttonTriggerComponents = _world.GetPool<ButtonTriggerComponent>();
         _movableComponents = _world.GetPool<MovableComponent>();
         _openDorAnimationComponents = _world.GetPool<OpenDorAnimationComponent>();

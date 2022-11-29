@@ -6,12 +6,14 @@ public class OpenDorAnimationSystem : IEcsInitSystem
     private EcsWorld _world;
     private EcsFilter _filter;
     private EcsPool<OpenDorAnimationComponent> _openDorAnimationComponents;
+    private EcsPool<RotatableComponent> _rotatableComponents;
 
     private void OpeningDor(int index)
     {
         foreach (int entity in _filter)
         {
             ref OpenDorAnimationComponent openDorAnimationComponent = ref _openDorAnimationComponents.Get(entity);
+            ref RotatableComponent rotatableComponent = ref _rotatableComponents.Get(entity);
 
             if (openDorAnimationComponent.index == index && !openDorAnimationComponent.isOpened)
             {
@@ -22,8 +24,8 @@ public class OpenDorAnimationSystem : IEcsInitSystem
                     openDorAnimationComponent.isOpened = true;
                     return;
                 }
-                openDorAnimationComponent.transform.rotation = openDorAnimationComponent.startRotation
-                                                               * Quaternion.AngleAxis(openDorAnimationComponent.currentRotateAngle, Vector3.up);
+                rotatableComponent.rotation = openDorAnimationComponent.startRotation
+                                              * Quaternion.AngleAxis(openDorAnimationComponent.currentRotateAngle, Vector3.up);
             }
         }
     }
@@ -33,6 +35,7 @@ public class OpenDorAnimationSystem : IEcsInitSystem
         _world = systems.GetWorld();
         _filter = _world.Filter<OpenDorAnimationComponent>().End();
         _openDorAnimationComponents = _world.GetPool<OpenDorAnimationComponent>();
+        _rotatableComponents = _world.GetPool<RotatableComponent>();
         ButtonTriggerSystem.ButtonPressed += OpeningDor;
     }
 }

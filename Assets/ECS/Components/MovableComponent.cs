@@ -2,8 +2,7 @@ using UnityEngine;
 
 public struct MovableComponent
 {
-    public Transform transform;
+    public Vector3 position;
     public float moveSpeed;
-    public float rotationSpeed;
     public bool isMoving;
 }

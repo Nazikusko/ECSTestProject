@@ -20,13 +20,10 @@ public class PlayerAnimatedSystem : IEcsRunSystem, IEcsInitSystem
 
     public void Init(IEcsSystems systems)
     {
-        if (_world == null)
-        {
-            _world = systems.GetWorld();
-            _filter = _world.Filter<AnimatedCharacterComponent>().Inc<MovableComponent>().End();
+        _world = systems.GetWorld();
+        _filter = _world.Filter<AnimatedCharacterComponent>().Inc<MovableComponent>().End();
 
-            _animatedCharacterComponents = _world.GetPool<AnimatedCharacterComponent>();
-            _movableComponents = _world.GetPool<MovableComponent>();
-        }
+        _animatedCharacterComponents = _world.GetPool<AnimatedCharacterComponent>();
+        _movableComponents = _world.GetPool<MovableComponent>();
     }
 }
