@@ -422,7 +422,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 748364358865924703, guid: 6c4ef095e0d854e4e90e0240d2ea072d, type: 3}
       propertyPath: m_Name
-      value: DorPrefab0
+      value: DoorPrefab0
       objectReference: {fileID: 0}
     - target: {fileID: 7953369008641673180, guid: 6c4ef095e0d854e4e90e0240d2ea072d, type: 3}
       propertyPath: m_RootOrder
@@ -1004,7 +1004,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 748364358865924703, guid: 6c4ef095e0d854e4e90e0240d2ea072d, type: 3}
       propertyPath: m_Name
-      value: DorPrefab1
+      value: DoorPrefab1
       objectReference: {fileID: 0}
     - target: {fileID: 7953369008641673180, guid: 6c4ef095e0d854e4e90e0240d2ea072d, type: 3}
       propertyPath: m_RootOrder
@@ -1459,7 +1459,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 748364358865924703, guid: 6c4ef095e0d854e4e90e0240d2ea072d, type: 3}
       propertyPath: m_Name
-      value: DorPrefab4
+      value: DoorPrefab4
       objectReference: {fileID: 0}
     - target: {fileID: 7953369008641673180, guid: 6c4ef095e0d854e4e90e0240d2ea072d, type: 3}
       propertyPath: m_RootOrder
@@ -2409,7 +2409,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 748364358865924703, guid: 6c4ef095e0d854e4e90e0240d2ea072d, type: 3}
       propertyPath: m_Name
-      value: DorPrefab2
+      value: DoorPrefab2
       objectReference: {fileID: 0}
     - target: {fileID: 7953369008641673180, guid: 6c4ef095e0d854e4e90e0240d2ea072d, type: 3}
       propertyPath: m_RootOrder
@@ -3213,7 +3213,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 748364358865924703, guid: 6c4ef095e0d854e4e90e0240d2ea072d, type: 3}
       propertyPath: m_Name
-      value: DorPrefab3
+      value: DoorPrefab3
       objectReference: {fileID: 0}
     - target: {fileID: 7953369008641673180, guid: 6c4ef095e0d854e4e90e0240d2ea072d, type: 3}
       propertyPath: m_RootOrder

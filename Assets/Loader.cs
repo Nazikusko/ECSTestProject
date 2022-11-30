@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class Loader : MonoBehaviour
 {
-    EcsWorld _world;
-    IEcsSystems _systems;
+    private EcsWorld _world;
+    private IEcsSystems _systems;
 
     void Start()
     {
@@ -16,9 +16,9 @@ public class Loader : MonoBehaviour
         _systems.Add(new UpdateTransformRotationSystem());
         _systems.Add(new CameraFollowSystem());
         _systems.Add(new PlayerMoveSystem());
-        _systems.Add(new PlayerAnimatedSystem());
+        _systems.Add(new PlayerAnimationSystem());
         _systems.Add(new ButtonTriggerSystem());
-        _systems.Add(new OpenDorAnimationSystem());
+        _systems.Add(new OpenDoorAnimationSystem());
         _systems.Init();
     }
 

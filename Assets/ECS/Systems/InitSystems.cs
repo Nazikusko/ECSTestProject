@@ -18,13 +18,23 @@ public class InitSystems : IEcsInitSystem
         }
 
         SpawnAndSetupPlayer();
+        SetupInput();
         SetupCamera();
 
         for (int i = 0; i < 5; i++)
         {
             SetupButton(i);
-            SetupDor(i);
+            SetupDoor(i);
         }
+    }
+
+    private void SetupInput()
+    {
+        var inputEntity = _world.NewEntity();
+        var inputEventComponent = _world.GetPool<InputComponent>();
+        inputEventComponent.Add(inputEntity);
+        ref InputComponent input = ref inputEventComponent.Get(inputEntity);
+        input.mainCamera = mainCamera;
     }
 
     private void SpawnAndSetupPlayer()
@@ -35,25 +45,19 @@ public class InitSystems : IEcsInitSystem
         var transformRotationComponent = _world.GetPool<TransformRotationComponent>();
         var movableComponent = _world.GetPool<MovableComponent>();
         var rotatableComponent = _world.GetPool<RotatableComponent>();
+        var pointToMoveComponent = _world.GetPool<PointToMoveComponent>();
+        var animatedCharacterComponent = _world.GetPool<AnimationCharacterComponent>();
 
-
-        var animatedCharacterComponent = _world.GetPool<AnimatedCharacterComponent>();
-        var inputEventComponent = _world.GetPool<InputComponent>();
-
-        movableComponent.Add(playerEntity);
-        rotatableComponent.Add(playerEntity);
         transformPositionComponent.Add(playerEntity);
         transformRotationComponent.Add(playerEntity);
-
+        movableComponent.Add(playerEntity);
+        rotatableComponent.Add(playerEntity);
+        pointToMoveComponent.Add(playerEntity);
         animatedCharacterComponent.Add(playerEntity);
-        inputEventComponent.Add(playerEntity);
 
         var playerInitData = PlayerInitData.LoadFromAsset();
         var spawnedPlayerPrefab = GameObject.Instantiate(playerInitData.playerPrefab, Vector3.zero, Quaternion.identity);
         animatedCharacterComponent.Get(playerEntity).animator = spawnedPlayerPrefab.GetComponent<Animator>();
-
-        ref InputComponent input = ref inputEventComponent.Get(playerEntity);
-        input.mainCamera = mainCamera;
 
         ref MovableComponent movable = ref movableComponent.Get(playerEntity);
         movable.moveSpeed = playerInitData.defaultSpeed;
@@ -64,10 +68,13 @@ public class InitSystems : IEcsInitSystem
         rotatable.rotation = spawnedPlayerPrefab.transform.rotation;
 
         ref TransformPositionComponent position = ref transformPositionComponent.Get(playerEntity);
-        position.SetTransform(spawnedPlayerPrefab.transform);
+        position.transform = spawnedPlayerPrefab.transform;
 
         ref TransformRotationComponent rotation = ref transformRotationComponent.Get(playerEntity);
-        rotation.SetTransform(spawnedPlayerPrefab.transform);
+        rotation.transform = spawnedPlayerPrefab.transform;
+
+        ref PointToMoveComponent point = ref pointToMoveComponent.Get(playerEntity);
+        point.pointToMove = spawnedPlayerPrefab.transform.position;
     }
 
     private void SetupCamera()
@@ -86,7 +93,7 @@ public class InitSystems : IEcsInitSystem
         movable.position = mainCamera.transform.position;
 
         ref TransformPositionComponent position = ref transformPositionComponent.Get(cameraEntity);
-        position.SetTransform(mainCamera.transform);
+        position.transform = mainCamera.transform;
         
         ref CameraFollowComponent camFollow =  ref camFollowComponent.Get(cameraEntity);
         camFollow.positionOffset = mainCamera.transform.position;
@@ -112,37 +119,37 @@ public class InitSystems : IEcsInitSystem
         buttonTrigger.index = index;
     }
 
-    private void SetupDor(int index)
+    private void SetupDoor(int index)
     {
-        var dorEntity = _world.NewEntity();
-        var openDorAnimationComponent = _world.GetPool<OpenDorAnimationComponent>();
+        var doorEntity = _world.NewEntity();
+        var openDoorAnimationComponent = _world.GetPool<OpenDoorAnimationComponent>();
         var transformRotationComponent = _world.GetPool<TransformRotationComponent>();
         var rotatableComponent = _world.GetPool<RotatableComponent>();
 
-        openDorAnimationComponent.Add(dorEntity);
-        transformRotationComponent.Add(dorEntity);
-        rotatableComponent.Add(dorEntity);
+        openDoorAnimationComponent.Add(doorEntity);
+        transformRotationComponent.Add(doorEntity);
+        rotatableComponent.Add(doorEntity);
 
-        var dorGameObject = GameObject.Find($"Doors/DorPrefab{index}");
-        if (dorGameObject == null)
+        var doorGameObject = GameObject.Find($"Doors/DoorPrefab{index}");
+        if (doorGameObject == null)
         {
-            Debug.LogError($"DorPrefab{index} - not found in scene");
+            Debug.LogError($"DoorPrefab{index} - not found in scene");
             return;
         }
 
-        ref OpenDorAnimationComponent dor = ref openDorAnimationComponent.Get(dorEntity);
-        dorGameObject.GetComponentInChildren<MeshRenderer>().material.color = ColorByIndex(index);
-        dor.index = index;
-        dor.startRotation = dorGameObject.transform.rotation;
+        ref OpenDoorAnimationComponent door = ref openDoorAnimationComponent.Get(doorEntity);
+        doorGameObject.GetComponentInChildren<MeshRenderer>().material.color = ColorByIndex(index);
+        door.index = index;
+        door.doorState = DoorSate.Stop;
+        door.startRotation = doorGameObject.transform.rotation;
 
-        ref RotatableComponent rotatable = ref rotatableComponent.Get(dorEntity);
-        rotatable.rotationSpeed = OpenDorAnimationComponent.OPEN_DOR_SPEED;
-        rotatable.startRotation = rotatable.rotation = dorGameObject.transform.rotation;
+        ref RotatableComponent rotatable = ref rotatableComponent.Get(doorEntity);
+        rotatable.rotationSpeed = OpenDoorAnimationComponent.OPEN_DOOR_SPEED;
+        rotatable.startRotation = rotatable.rotation = doorGameObject.transform.rotation;
 
-        ref TransformRotationComponent rotation = ref transformRotationComponent.Get(dorEntity);
-        rotation.SetTransform(dorGameObject.transform);
+        ref TransformRotationComponent rotation = ref transformRotationComponent.Get(doorEntity);
+        rotation.transform = doorGameObject.transform;
     }
 
     private Color ColorByIndex(int index) => Color.HSVToRGB(index * 0.2f, 0.9f, 0.8f);
-
 }

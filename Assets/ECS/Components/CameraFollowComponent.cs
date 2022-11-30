@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-struct CameraFollowComponent
+public struct CameraFollowComponent
 {
     public Vector3 positionOffset;
 }

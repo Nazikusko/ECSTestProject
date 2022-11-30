@@ -1,14 +1,15 @@
 # ECSTestProject
+На выполнение и доработку в сумме ушло времени: 30ч.
 
 На сервере могут быть запущены следующие системы:
 - ButtonTriggerSystem
 - CameraFollowSystem
-- OpenDorAnimationSystem
+- OpenDoorAnimationSystem
 - PlayerMoveSystem
 
 На клиенте должны быть заущены следующие системы:
 - InitSystems
 - InputSystem
-- PlayerAnimatedSystem
+- PlayerAnimationSystem
 - UpdateTransformPositionSystem
 - UpdateTransformRotationSystem

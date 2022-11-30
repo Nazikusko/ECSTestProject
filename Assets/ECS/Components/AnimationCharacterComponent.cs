@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public struct AnimatedCharacterComponent
+public struct AnimationCharacterComponent
 {
     public Animator animator;
 }

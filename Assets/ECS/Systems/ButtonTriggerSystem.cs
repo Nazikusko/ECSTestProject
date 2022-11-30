@@ -4,50 +4,60 @@ using UnityEngine;
 
 public class ButtonTriggerSystem : IEcsRunSystem, IEcsInitSystem
 {
-    public static event Action<int> ButtonPressed;
     private EcsWorld _world;
     private EcsFilter _filterForButtonTrigger;
-    private EcsFilter _filterForMovable;
-    private EcsFilter _filterForDor;
+    private EcsFilter _filterForPlayer;
+    private EcsFilter _filterForDoor;
     private EcsPool<ButtonTriggerComponent> _buttonTriggerComponents;
     private EcsPool<MovableComponent> _movableComponents;
-    private EcsPool<OpenDorAnimationComponent> _openDorAnimationComponents;
+    private EcsPool<OpenDoorAnimationComponent> _openDoorAnimationComponents;
 
-    public void Run(IEcsSystems systems)
-    {
-        foreach (var entityMovable in _filterForMovable)
-        {
-            Vector3 position = _movableComponents.Get(entityMovable).position;
-            foreach (int entityButton in _filterForButtonTrigger)
-            {
-                ref ButtonTriggerComponent buttonTriggerComponent = ref _buttonTriggerComponents.Get(entityButton);
-
-                if (Vector3.Distance(buttonTriggerComponent.buttonPosition, position) < buttonTriggerComponent.buttonRadius)
-                {
-                    foreach (var entityDor in _filterForDor)
-                    {
-                        if (buttonTriggerComponent.index == _openDorAnimationComponents.Get(entityDor).index)
-                            ButtonPressed?.Invoke(buttonTriggerComponent.index);
-                    }
-                    buttonTriggerComponent.inTrigger = true;
-                }
-                else
-                {
-                    buttonTriggerComponent.inTrigger = false;
-                }
-            }
-        }
-    }
 
     public void Init(IEcsSystems systems)
     {
         _world = systems.GetWorld();
         _filterForButtonTrigger = _world.Filter<ButtonTriggerComponent>().End();
-        _filterForMovable = _world.Filter<MovableComponent>().End();
-        _filterForDor = _world.Filter<OpenDorAnimationComponent>().End();
-        
+        _filterForPlayer = _world.Filter<MovableComponent>().Inc<PointToMoveComponent>().End();
+        _filterForDoor = _world.Filter<OpenDoorAnimationComponent>().End();
+
         _buttonTriggerComponents = _world.GetPool<ButtonTriggerComponent>();
         _movableComponents = _world.GetPool<MovableComponent>();
-        _openDorAnimationComponents = _world.GetPool<OpenDorAnimationComponent>();
+        _openDoorAnimationComponents = _world.GetPool<OpenDoorAnimationComponent>();
+    }
+
+    public void Run(IEcsSystems systems)
+    {
+        foreach (var entityPlayer in _filterForPlayer)
+        {
+            Vector3 playerPosition = _movableComponents.Get(entityPlayer).position;
+            foreach (int entityButton in _filterForButtonTrigger)
+            {
+                ref ButtonTriggerComponent buttonTriggerComponent = ref _buttonTriggerComponents.Get(entityButton);
+
+                if (Vector3.Distance(buttonTriggerComponent.buttonPosition, playerPosition) < buttonTriggerComponent.buttonRadius)
+                {
+                    SetDoorStateByIndex(DoorSate.Opening, buttonTriggerComponent.index);
+                }
+                else
+                {
+                    SetDoorStateByIndex(DoorSate.Stop, buttonTriggerComponent.index);
+                }
+            }
+        }
+    }
+
+    private void SetDoorStateByIndex(DoorSate state, int index)
+    {
+        foreach (var entityDoor in _filterForDoor)
+        {
+            ref OpenDoorAnimationComponent openDoorAnimationComponent = ref _openDoorAnimationComponents.Get(entityDoor);
+
+            if (openDoorAnimationComponent.doorState == DoorSate.Open) continue;
+
+            if (index == openDoorAnimationComponent.index)
+            {
+                openDoorAnimationComponent.doorState = state;
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-struct RotatableComponent
+public struct RotatableComponent
 {
     public Quaternion rotation;
     public Quaternion startRotation;
