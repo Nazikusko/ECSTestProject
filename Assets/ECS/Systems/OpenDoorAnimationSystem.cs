@@ -22,9 +22,7 @@ public class OpenDoorAnimationSystem : IEcsInitSystem , IEcsRunSystem
         {
             ref OpenDoorAnimationComponent openDoorAnimationComponent = ref _openDoorAnimationComponents.Get(entity);
             ref RotatableComponent rotatableComponent = ref _rotatableComponents.Get(entity);
-
-            Debug.Log(openDoorAnimationComponent.doorState);
-
+            
             if (openDoorAnimationComponent.doorState == DoorSate.Opening)
             {
                 openDoorAnimationComponent.currentRotateAngle += Time.deltaTime * OpenDoorAnimationComponent.OPEN_DOOR_SPEED;
